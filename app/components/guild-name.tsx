@@ -6,7 +6,6 @@ interface GuildNameProps {
 
 export const GuildName = ({ guildId }: GuildNameProps) => {
   const guild = useGuildDetails(guildId);
-  console.log(guild);
 
   return <>{guild && `${guild.name} [${guild.tag}]`}</>;
 };

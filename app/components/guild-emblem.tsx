@@ -6,7 +6,6 @@ interface GuildEmblemProps {
 
 export const GuildEmblem = ({guildId}: GuildEmblemProps) => {
   const data = useGuildDetails(guildId);
-  console.log(data);
 
   return <></>;
 };
