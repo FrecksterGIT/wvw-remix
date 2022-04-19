@@ -1,5 +1,5 @@
-import type { IMatchObjective, IObjective } from "~/models/interfaces.server";
 import { useMemo, useState } from "react";
+import type { IMatchObjective, IObjective } from "~/models/interfaces.server";
 import { Camp } from "~/components/svgs/camp";
 import { Tower } from "~/components/svgs/tower";
 import { Keep } from "~/components/svgs/keep";
@@ -16,6 +16,25 @@ export const BorderlandObjective = ({
   objectives,
   mapObjective,
 }: BorderlandObjectiveProps) => {
+  const MAP_SIZES = useMemo(() => ({
+    38: [
+      [8958, 12798],
+      [12030, 15870],
+    ],
+    95: [
+      [5630, 11518],
+      [8702, 14590],
+    ],
+    96: [
+      [12798, 10878],
+      [15870, 13950],
+    ],
+    1099: [
+      [9214, 8958],
+      [12286, 12030],
+    ],
+  }), []);
+
   const objective = useMemo(
     () => objectives.find((obj) => obj.id === mapObjective.id),
     [mapObjective.id, objectives]
@@ -44,12 +63,31 @@ export const BorderlandObjective = ({
 
   const [showDetails, setShowDetails] = useState(false);
 
+  const coords = useMemo(() => {
+    if (objective) {
+      const map = MAP_SIZES[objective.map_id];
+      if (map) {
+        const mapSize = [map[1][0] - map[0][0], map[1][1] - map[0][1]];
+        const point = objective.coord;
+        if (point) {
+          const coord = [point[0] - map[0][0], point[1] - map[0][1]];
+          return [(coord[0] / mapSize[0]) * 100, (coord[1] / mapSize[1]) * 100];
+        }
+      }
+    }
+    return [0, 0];
+  }, [MAP_SIZES, objective]);
+
   return (
     <>
       {showObjective && (
         <div
           title={objective?.name}
-          className={`relative inline-block h-[26px] w-[26px] rounded-full bg-owner-${mapObjective.owner.toLowerCase()}`}
+          className={`absolute inline-block h-[26px] w-[26px] rounded-full bg-owner-${mapObjective.owner.toLowerCase()}`}
+          style={{
+            top: `calc(${coords[1]}% - 13px)`,
+            left: `calc(${coords[0]}% - 13px)`,
+          }}
           onMouseEnter={() => setShowDetails(true)}
           onMouseLeave={() => setShowDetails(false)}
         >

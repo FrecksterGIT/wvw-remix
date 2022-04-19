@@ -1,6 +1,6 @@
-import { add } from "date-fns";
-import { useTimer } from "react-timer-hook";
 import { useCallback, useEffect } from "react";
+import { useTimer } from "react-timer-hook";
+import { add } from "date-fns";
 
 interface TimerProps {
   time: Date;

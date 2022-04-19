@@ -1,3 +1,4 @@
+import axios from "cachios";
 import type {
   IGuild,
   IMatch,
@@ -5,7 +6,6 @@ import type {
   IObjective,
   IWorld,
 } from "~/models/interfaces.server";
-import axios from "cachios";
 
 const API_ENDPOINT = "https://api.guildwars2.com/";
 

@@ -1,5 +1,5 @@
-import type { IMatch } from "~/models/interfaces.server";
 import { useMemo } from "react";
+import type { IMatch } from "~/models/interfaces.server";
 
 interface VictoryPointsProps {
   match: IMatch;

@@ -1,8 +1,8 @@
-import type { IMatch } from "~/models/interfaces.server";
 import { json, type LoaderFunction } from "@remix-run/node";
+import { commitSession } from "~/session.server";
+import type { IMatch } from "~/models/interfaces.server";
 import { sessionData } from "~/models/user.server";
 import { loadMatch } from "~/models/matches.server";
-import { commitSession } from "~/session.server";
 
 export interface UpdateLoaderData {
   match: IMatch;

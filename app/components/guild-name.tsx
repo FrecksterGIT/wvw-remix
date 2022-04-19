@@ -1,32 +1,12 @@
-import { useFetcher } from "@remix-run/react";
-import { useEffect, useState } from "react";
-import type { GuildNameLoaderData } from "~/routes/guilds/$guildId";
+import { useGuildDetails } from "~/hooks/use-guild-details";
 
 interface GuildNameProps {
   guildId: string;
 }
 
-const guildCache: Record<string, string> = {};
-
 export const GuildName = ({ guildId }: GuildNameProps) => {
-  const fetcher = useFetcher<GuildNameLoaderData>();
-  const [name, setName] = useState("");
+  const guild = useGuildDetails(guildId);
+  console.log(guild);
 
-  useEffect(() => {
-    if (guildCache[guildId]) {
-      setName(guildCache[guildId]);
-    } else {
-      fetcher.load(`/guilds/${guildId}`);
-    }
-  }, [guildId]);
-
-  useEffect(() => {
-    if (fetcher.data) {
-      const shownName = `${fetcher.data.guild?.name} [${fetcher.data.guild?.tag}]`;
-      guildCache[guildId] = shownName;
-      setName(shownName);
-    }
-  }, [fetcher.data, guildId]);
-
-  return <>{name}</>;
+  return <>{guild && `${guild.name} [${guild.tag}]`}</>;
 };

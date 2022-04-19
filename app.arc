@@ -2,7 +2,7 @@
 wvw-remix-370c
 
 @aws
-region eu-west-1
+region eu-central-1
 architecture arm64
 timeout 29
 memory 512

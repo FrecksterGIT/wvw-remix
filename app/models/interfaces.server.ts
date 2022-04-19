@@ -125,7 +125,7 @@ export interface IObjective {
   sector_id: number;
   type: string;
   map_type: string;
-  map_id: number;
+  map_id: 38 | 95 | 96 | 1099;
   coord: number[];
   label_coord: number[];
   marker: string;

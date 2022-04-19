@@ -1,10 +1,10 @@
+import { Link } from "@remix-run/react";
 import type {
   IMatch,
   IMatchOverview,
   IWorld,
   IColorsWithNumbers,
 } from "~/models/interfaces.server";
-import { Link } from "@remix-run/react";
 
 interface MatchesSelectorProps {
   matches: IMatchOverview[];

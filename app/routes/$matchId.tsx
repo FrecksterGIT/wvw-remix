@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
   type LoaderFunction,
   type MetaFunction,
@@ -6,6 +7,7 @@ import {
 } from "@remix-run/node";
 import { useFetcher, useLoaderData } from "@remix-run/react";
 import { commitSession } from "~/session.server";
+import type { UpdateLoaderData } from "~/routes/$matchId.update";
 import { sessionData } from "~/models/user.server";
 import {
   loadMatch,
@@ -24,8 +26,6 @@ import { WorldMap } from "~/components/world-map";
 import { Income } from "~/components/income";
 import { VictoryPoints } from "~/components/victory-points";
 import { MatchLog } from "~/components/match-log";
-import { useEffect, useState } from "react";
-import type { UpdateLoaderData } from "~/routes/$matchId.update";
 
 interface LoaderData {
   matches: IMatchOverview[];

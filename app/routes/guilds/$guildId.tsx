@@ -1,6 +1,6 @@
 import type { LoaderFunction } from "@remix-run/node";
-import type { IGuild } from "~/models/interfaces.server";
 import { json } from "@remix-run/node";
+import type { IGuild } from "~/models/interfaces.server";
 import { loadGuild } from "~/models/matches.server";
 
 export interface GuildNameLoaderData {

@@ -1,5 +1,5 @@
-import type { IMatch, IObjective, IWorld } from "~/models/interfaces.server";
 import { useCallback, useMemo } from "react";
+import type { IMatch, IObjective, IWorld } from "~/models/interfaces.server";
 
 interface MatchLogProps {
   match: IMatch;

@@ -1,5 +1,5 @@
-import { useStopwatch } from "react-timer-hook";
 import { useCallback, useEffect, useMemo } from "react";
+import { useStopwatch } from "react-timer-hook";
 import { differenceInSeconds } from "date-fns";
 
 interface TimerSinceProps {
