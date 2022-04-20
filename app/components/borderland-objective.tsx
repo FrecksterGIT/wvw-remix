@@ -82,7 +82,6 @@ export const BorderlandObjective = ({
     <>
       {showObjective && (
         <div
-          title={objective?.name}
           className={`absolute inline-block h-[26px] w-[26px] rounded-full bg-owner-${mapObjective.owner.toLowerCase()}`}
           style={{
             top: `calc(${coords[1]}% - 13px)`,
