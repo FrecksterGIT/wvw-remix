@@ -6,6 +6,9 @@ import { Keep } from "~/components/svgs/keep";
 import { Castle } from "~/components/svgs/castle";
 import { TurnTimer } from "~/components/timer";
 import { BorderlandObjectiveDetails } from "~/components/borderland-objective-details";
+import { TierIndicator } from "~/components/tier-indicator";
+import { WaypointIndicator } from "~/components/waypoint-indicator";
+import { ClaimedIndicator } from "~/components/claimed-indicator";
 
 interface BorderlandObjectiveProps {
   objectives: IObjective[];
@@ -16,24 +19,27 @@ export const BorderlandObjective = ({
   objectives,
   mapObjective,
 }: BorderlandObjectiveProps) => {
-  const MAP_SIZES = useMemo(() => ({
-    38: [
-      [8958, 12798],
-      [12030, 15870],
-    ],
-    95: [
-      [5630, 11518],
-      [8702, 14590],
-    ],
-    96: [
-      [12798, 10878],
-      [15870, 13950],
-    ],
-    1099: [
-      [9214, 8958],
-      [12286, 12030],
-    ],
-  }), []);
+  const MAP_SIZES = useMemo(
+    () => ({
+      38: [
+        [8958, 12798],
+        [12030, 15870],
+      ],
+      95: [
+        [5630, 11518],
+        [8702, 14590],
+      ],
+      96: [
+        [12798, 10878],
+        [15870, 13950],
+      ],
+      1099: [
+        [9214, 8958],
+        [12286, 12030],
+      ],
+    }),
+    []
+  );
 
   const objective = useMemo(
     () => objectives.find((obj) => obj.id === mapObjective.id),
@@ -91,6 +97,9 @@ export const BorderlandObjective = ({
           onMouseLeave={() => setShowDetails(false)}
         >
           <Svg />
+          <TierIndicator mapObjective={mapObjective} />
+          <WaypointIndicator mapObjective={mapObjective} />
+          <ClaimedIndicator mapObjective={mapObjective} />
           <TurnTimer time={mapObjective.last_flipped} />
           {showDetails && objective && (
             <BorderlandObjectiveDetails
