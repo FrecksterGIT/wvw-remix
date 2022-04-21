@@ -79,7 +79,7 @@ export const MatchLog = ({ match, worlds, objectives }: MatchLogProps) => {
   }, [getColor, getObjective, getWorld, match.maps]);
 
   return (
-    <>
+    <div className="h-[5em] overflow-y-scroll">
       {logEntries.map(
         ({ id, what, time, formattedTime, to, toColor, from }) => (
           <div key={`${id}-${time}`}>
@@ -90,6 +90,6 @@ export const MatchLog = ({ match, worlds, objectives }: MatchLogProps) => {
           </div>
         )
       )}
-    </>
+    </div>
   );
 };

@@ -21,11 +21,13 @@ import type {
   IObjective,
   IWorld,
 } from "~/models/interfaces.server";
-import { MatchesSelector } from "~/components/matches-selector";
 import { WorldMap } from "~/components/world-map";
-import { Income } from "~/components/income";
+import { CurrentIncomes } from "~/components/current-incomes";
 import { VictoryPoints } from "~/components/victory-points";
 import { MatchLog } from "~/components/match-log";
+import { CurrentWorlds } from "~/components/current-worlds";
+import { CurrentPoints } from "~/components/current-points";
+import { CurrentIncomesChart } from "~/components/current-incomes-chart";
 
 interface LoaderData {
   matches: IMatchOverview[];
@@ -89,7 +91,7 @@ export default function Index() {
   const [match, setMatch] = useState(loaderData.match);
   const [worlds, setWorlds] = useState(loaderData.worlds);
   const [objectives, setObjectives] = useState(loaderData.objectives);
-
+  const [windowActive, setWindowActive] = useState<boolean>(true);
   const fetcher = useFetcher<UpdateLoaderData>();
 
   useEffect(() => {
@@ -107,8 +109,23 @@ export default function Index() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetcher.load(`/${match.id}/update`);
+      if (windowActive) {
+        console.log(Date.now(), "fetching interval");
+        fetcher.load(`/${match.id}/update`);
+      }
     }, 10 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!windowActive && !document.hidden) {
+        console.log(Date.now(), "fetching on active document");
+        fetcher.load(`/${match.id}/update`);
+      }
+      setWindowActive(document.hidden);
+    }, 150);
 
     return () => clearInterval(interval);
   }, []);
@@ -118,17 +135,23 @@ export default function Index() {
       <div>
         <div className="h-[50px]">Header</div>
         <WorldMap match={match} objectives={objectives} />
-        <div className="grid grid-cols-5 text-gray">
-          <div className="col-span-1 mt-[24px]">
-            <MatchesSelector matches={matches} worlds={worlds} match={match} />
+        <div className="flex text-gray">
+          <div className="mr-5">
+            <CurrentWorlds worlds={worlds} match={match} />
           </div>
-          <div className="col-span-1">
-            <Income match={match} />
+          <div className="mr-5">
+            <CurrentIncomes match={match} />
           </div>
-          <div className="col-span-1">
+          <div className="mr-5">
+            <CurrentIncomesChart match={match} />
+          </div>
+          <div className="mr-5">
+            <CurrentPoints match={match} />
+          </div>
+          <div className="mr-5">
             <VictoryPoints match={match} />
           </div>
-          <div className="col-span-2 h-[96px] overflow-y-scroll">
+          <div className="flex-grow">
             <MatchLog match={match} worlds={worlds} objectives={objectives} />
           </div>
         </div>

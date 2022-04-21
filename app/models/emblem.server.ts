@@ -1,10 +1,23 @@
-import { loadBackgrounds, loadColors, loadForegrounds, loadGuild } from "~/models/matches.server";
-import type { IColor, IEmblemDetailsDef, IForeBackground, IGuild } from "~/models/interfaces.server";
+import {
+  loadBackgrounds,
+  loadColors,
+  loadForegrounds,
+  loadGuild,
+} from "~/models/matches.server";
+import type {
+  IColor,
+  IEmblemDetailsDef,
+  IForeBackground,
+  IGuild,
+} from "~/models/interfaces.server";
 import Jimp from "jimp";
 
 type EmblemConfig = [string[], IColor[], boolean, boolean];
 
-export const getEmblem = async (request: Request, guildId: string): Promise<Buffer | null> => {
+export const getEmblem = async (
+  request: Request,
+  guildId: string
+): Promise<Buffer | null> => {
   const guild = await loadGuild(guildId);
 
   const colors = await loadColors();
@@ -23,29 +36,64 @@ export const getEmblem = async (request: Request, guildId: string): Promise<Buff
   return null;
 };
 
-const getForeground = (guild: IGuild, foregrounds: IForeBackground[], colors: IColor[]) => {
-  return getConfig(guild, foregrounds, colors, guild.emblem.foreground,
-    "FlipForegroundHorizontal", "FlipForegroundVertical");
+const getForeground = (
+  guild: IGuild,
+  foregrounds: IForeBackground[],
+  colors: IColor[]
+) => {
+  return getConfig(
+    guild,
+    foregrounds,
+    colors,
+    guild.emblem.foreground,
+    "FlipForegroundHorizontal",
+    "FlipForegroundVertical"
+  );
 };
 
-const getBackground = (guild: IGuild, backgrounds: IForeBackground[], colors: IColor[]) => {
-  return getConfig(guild, backgrounds, colors, guild.emblem.background,
-    "FlipBackgroundHorizontal", "FlipBackgroundVertical");
+const getBackground = (
+  guild: IGuild,
+  backgrounds: IForeBackground[],
+  colors: IColor[]
+) => {
+  return getConfig(
+    guild,
+    backgrounds,
+    colors,
+    guild.emblem.background,
+    "FlipBackgroundHorizontal",
+    "FlipBackgroundVertical"
+  );
 };
 
-const getConfig = (guild: IGuild, res: IForeBackground[], colors: IColor[], def: IEmblemDetailsDef, horFlag: string, verFlag: string): EmblemConfig => {
+const getConfig = (
+  guild: IGuild,
+  res: IForeBackground[],
+  colors: IColor[],
+  def: IEmblemDetailsDef,
+  horFlag: string,
+  verFlag: string
+): EmblemConfig => {
   const fgDef = res.find((fg) => fg.id === def.id);
-  const files: string[] = fgDef?.layers.map((u) => u.substring(u.lastIndexOf("/") + 1, u.length)) ?? [];
+  const files: string[] =
+    fgDef?.layers.map((u) => u.substring(u.lastIndexOf("/") + 1, u.length)) ??
+    [];
 
   const flags = guild.emblem.flags;
   const flipHorizontal: boolean = flags.includes(horFlag);
   const flipVertical: boolean = flags.includes(verFlag);
-  const emblemColors: IColor[] = def.colors.map((color: number) => (colors.find((c: IColor) => c.id === color) as IColor));
+  const emblemColors: IColor[] = def.colors.map(
+    (color: number) => colors.find((c: IColor) => c.id === color) as IColor
+  );
 
   return [files, emblemColors, flipHorizontal, flipVertical];
 };
 
-const draw = async (background: EmblemConfig, foreground: EmblemConfig, urlPrefix: string): Promise<Buffer> => {
+const draw = async (
+  background: EmblemConfig,
+  foreground: EmblemConfig,
+  urlPrefix: string
+): Promise<Buffer> => {
   return new Promise(async (resolve) => {
     let image: Jimp = await drawBackground(background, urlPrefix);
     image = await drawForeground(foreground, urlPrefix, image);
@@ -55,9 +103,17 @@ const draw = async (background: EmblemConfig, foreground: EmblemConfig, urlPrefi
   });
 };
 
-const drawBackground = async (background: EmblemConfig, urlPrefix: string): Promise<Jimp> => {
+const drawBackground = async (
+  background: EmblemConfig,
+  urlPrefix: string
+): Promise<Jimp> => {
   return new Promise<Jimp>(async (resolve) => {
-    const [images, colors, flipHorizontal, flipVertical]: [string[], IColor[], boolean, boolean] = background;
+    const [images, colors, flipHorizontal, flipVertical]: [
+      string[],
+      IColor[],
+      boolean,
+      boolean
+    ] = background;
     const img = await Jimp.read(urlPrefix + images[0]);
     img.mirror(flipHorizontal, flipVertical);
     console.log(colors[0]);
@@ -65,9 +121,18 @@ const drawBackground = async (background: EmblemConfig, urlPrefix: string): Prom
   });
 };
 
-const drawForeground = async (def: EmblemConfig, urlPrefix: string, image: Jimp): Promise<Jimp> => {
+const drawForeground = async (
+  def: EmblemConfig,
+  urlPrefix: string,
+  image: Jimp
+): Promise<Jimp> => {
   return new Promise<Jimp>(async (resolve) => {
-    const [images, colors, flipHorizontal, flipVertical]: [string[], IColor[], boolean, boolean] = def;
+    const [images, colors, flipHorizontal, flipVertical]: [
+      string[],
+      IColor[],
+      boolean,
+      boolean
+    ] = def;
     images.reverse();
     const img = await drawImage(image, images, colors, urlPrefix);
     img.mirror(flipHorizontal, flipVertical);
@@ -75,20 +140,32 @@ const drawForeground = async (def: EmblemConfig, urlPrefix: string, image: Jimp)
   });
 };
 
-const drawImage = async (composed: Jimp, images: string[], colors: IColor[], urlPrefix: string, count: number = 0): Promise<Jimp> => {
+const drawImage = async (
+  composed: Jimp,
+  images: string[],
+  colors: IColor[],
+  urlPrefix: string,
+  count: number = 0
+): Promise<Jimp> => {
   return new Promise<Jimp>(async (resolve) => {
     const image = images.pop();
     if (image) {
       const imagePart = await Jimp.read(urlPrefix + image);
       const color = colors[count === 1 || colors.length === 1 ? 0 : 1];
       console.log(`drawImage`, color, colors);
-      composed.composite(colorize(imagePart, color), 0, 0, {
-        mode: Jimp.BLEND_SOURCE_OVER,
-        opacityDest: 1,
-        opacitySource: 1
-      }, () => {
-        resolve(drawImage(composed, images, colors, urlPrefix, ++count));
-      });
+      composed.composite(
+        colorize(imagePart, color),
+        0,
+        0,
+        {
+          mode: Jimp.BLEND_SOURCE_OVER,
+          opacityDest: 1,
+          opacitySource: 1,
+        },
+        () => {
+          resolve(drawImage(composed, images, colors, urlPrefix, ++count));
+        }
+      );
     } else {
       resolve(composed);
     }
@@ -100,10 +177,11 @@ const colorize = (image: Jimp, color: IColor) => {
     return image;
   }
   const base = color.cloth;
-  return image.clone()
-    .greyscale((err, value) => value.color([
-      { apply: "mix", params: [translateColor(base.rgb), 100] }
-    ]));
+  return image
+    .clone()
+    .greyscale((err, value) =>
+      value.color([{ apply: "mix", params: [translateColor(base.rgb), 100] }])
+    );
 };
 
 const translateColor = (color: [number, number, number]) => {

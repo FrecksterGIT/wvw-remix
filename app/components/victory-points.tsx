@@ -19,14 +19,17 @@ export const VictoryPoints = ({ match }: VictoryPointsProps) => {
     <>
       <p>Victory Points</p>
       <ul>
-        <li>
-          {match.victory_points.green} {diffs.green || ""}
+        <li className="grid grid-cols-2">
+          <span>{match.victory_points.green}</span>
+          <span>{diffs.green || ""}</span>
         </li>
-        <li>
-          {match.victory_points.blue} {diffs.blue || ""}
+        <li className="grid grid-cols-2">
+          <span>{match.victory_points.blue}</span>
+          <span>{diffs.blue || ""}</span>
         </li>
-        <li>
-          {match.victory_points.red} {diffs.red || ""}
+        <li className="grid grid-cols-2">
+          <span>{match.victory_points.red}</span>
+          <span>{diffs.red || ""}</span>
         </li>
       </ul>
     </>

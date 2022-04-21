@@ -22,7 +22,13 @@ export const TurnTimer = ({ time }: TimerProps) => {
 
   if (minutes > 0 || seconds > 0) {
     return (
-      <div className="top-[26px] text-white">
+      <div
+        className="top-[26px] text-white"
+        style={{
+          textShadow:
+            "0 -1px #000000, 1px 0 #000000, 0 1px #000000, -1px 0 #000000, 0 -1px 2px #000000, 1px 0 2px #000000, 0 1px 2px #000000, -1px 0 2px #000000, 0 -1px 2px #000000, 1px 0 2px #000000, 0 1px 2px #000000, -1px 0 2px #000000",
+        }}
+      >
         {number(minutes)}:{number(seconds)}
       </div>
     );

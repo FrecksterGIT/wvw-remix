@@ -54,7 +54,7 @@ export const set = async (
   return new Promise((resolve, reject) => {
     client().putObject(
       {
-        ACL: 'public-read',
+        ACL: "public-read",
         Body: content,
         Bucket: "gw2-emblems",
         Key: contentId,

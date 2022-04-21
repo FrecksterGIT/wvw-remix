@@ -1,13 +1,9 @@
 import { useMemo } from "react";
-import type { IMatch } from "~/models/interfaces.server";
+import type { IMap } from "~/models/interfaces.server";
 
-interface IncomeProps {
-  match: IMatch;
-}
-
-export const Income = ({ match }: IncomeProps) => {
-  const incomes = useMemo(() => {
-    return match.maps.reduce(
+export const useIncomes = (maps: IMap[]) => {
+  return useMemo(() => {
+    return maps.reduce(
       (acc, map) => {
         const mapValues = map.objectives.reduce(
           (objAcc, obj) => {
@@ -43,15 +39,5 @@ export const Income = ({ match }: IncomeProps) => {
         green: 0,
       }
     );
-  }, [match.maps]);
-  return (
-    <>
-      <p>Income</p>
-      <ul>
-        <li>{incomes.green}</li>
-        <li>{incomes.blue}</li>
-        <li>{incomes.red}</li>
-      </ul>
-    </>
-  );
+  }, [maps]);
 };

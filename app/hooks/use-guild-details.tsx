@@ -17,7 +17,6 @@ export const useGuildDetails = (guildId: string): IGuild | undefined => {
     }
   }, [guildId]);
 
-
   useEffect(() => {
     if (fetcher.data?.guild) {
       setData(fetcher.data.guild);

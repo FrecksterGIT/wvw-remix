@@ -3,8 +3,8 @@ import type {
   IMatch,
   IMatchOverview,
   IWorld,
-  IColorsWithNumbers,
 } from "~/models/interfaces.server";
+import { WorldList } from "~/components/world-list";
 
 interface MatchesSelectorProps {
   matches: IMatchOverview[];
@@ -36,21 +36,3 @@ export const MatchesSelector = ({
     </ul>
   );
 };
-
-interface WorldListProps {
-  match: IMatchOverview;
-  worlds: IWorld[];
-  color: keyof IColorsWithNumbers;
-}
-
-const WorldList = ({ match, worlds, color }: WorldListProps) => (
-  <span className={`text-${color}`}>
-    {worldName(match.worlds[color], worlds)}
-    {match.all_worlds[color].map((allWorld) =>
-      allWorld !== match.worlds[color] ? worldName(allWorld, worlds) : ""
-    )}
-  </span>
-);
-
-const worldName = (worldId: number, worlds: IWorld[]): string =>
-  worlds.find((world) => world.id === worldId)?.name ?? "";

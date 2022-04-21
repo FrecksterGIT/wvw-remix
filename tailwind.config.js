@@ -14,6 +14,12 @@ module.exports = {
     "bg-waypoint",
   ],
   theme: {
+    fontFamily: {
+      sans: ["Open Sans"],
+    },
+    fontSize: {
+      base: ["11px", { lineHeight: "13px" }],
+    },
     extend: {
       colors: {
         white: "#ffffff",
