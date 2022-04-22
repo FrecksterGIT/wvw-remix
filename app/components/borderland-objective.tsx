@@ -101,10 +101,11 @@ export const BorderlandObjective = ({
           <WaypointIndicator mapObjective={mapObjective} />
           <ClaimedIndicator mapObjective={mapObjective} />
           <TurnTimer time={mapObjective.last_flipped} />
-          {showDetails && objective && (
+          {objective && (
             <BorderlandObjectiveDetails
               objective={objective}
               mapObjective={mapObjective}
+              showDetails={showDetails}
             />
           )}
         </div>

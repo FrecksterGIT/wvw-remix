@@ -110,7 +110,6 @@ export default function Index() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (windowActive) {
-        console.log(Date.now(), "fetching interval");
         fetcher.load(`/${match.id}/update`);
       }
     }, 10 * 1000);
@@ -121,7 +120,6 @@ export default function Index() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (!windowActive && !document.hidden) {
-        console.log(Date.now(), "fetching on active document");
         fetcher.load(`/${match.id}/update`);
       }
       setWindowActive(document.hidden);

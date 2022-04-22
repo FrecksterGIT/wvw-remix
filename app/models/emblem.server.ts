@@ -116,7 +116,6 @@ const drawBackground = async (
     ] = background;
     const img = await Jimp.read(urlPrefix + images[0]);
     img.mirror(flipHorizontal, flipVertical);
-    console.log(colors[0]);
     resolve(colorize(img, colors[0]));
   });
 };
@@ -152,7 +151,6 @@ const drawImage = async (
     if (image) {
       const imagePart = await Jimp.read(urlPrefix + image);
       const color = colors[count === 1 || colors.length === 1 ? 0 : 1];
-      console.log(`drawImage`, color, colors);
       composed.composite(
         colorize(imagePart, color),
         0,

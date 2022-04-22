@@ -7,11 +7,13 @@ import { GuildEmblem } from "~/components/guild-emblem";
 interface BorderlandObjectiveDetailsProps {
   mapObjective: IMatchObjective;
   objective: IObjective;
+  showDetails: boolean;
 }
 
 export const BorderlandObjectiveDetails = ({
   mapObjective,
   objective,
+  showDetails,
 }: BorderlandObjectiveDetailsProps) => {
   const yaks = useMemo(() => {
     if (mapObjective.yaks_delivered) {
@@ -29,7 +31,11 @@ export const BorderlandObjectiveDetails = ({
   }, [mapObjective.yaks_delivered]);
 
   return (
-    <div className="absolute top-0 left-[40px] z-10 w-[230px] bg-[#000] px-[11px] py-[6px] pl-[70px] text-white">
+    <div
+      className={`absolute top-0 left-[40px] z-10 w-[230px] bg-[#000] px-[11px] py-[6px] pl-[70px] text-white ${
+        showDetails ? "" : "hidden"
+      }`}
+    >
       <div className="absolute left-[10px] top-[10px]">
         {mapObjective.claimed_by && (
           <GuildEmblem guildId={mapObjective.claimed_by} />
@@ -39,7 +45,7 @@ export const BorderlandObjectiveDetails = ({
       <div className="grid grid-cols-2">
         <span className="col-span-1">Turned</span>
         <span className="col-span-1">
-          <TimerSince time={mapObjective.last_flipped} />
+          {showDetails && <TimerSince time={mapObjective.last_flipped} />}
         </span>
         {mapObjective.claimed_at && mapObjective.claimed_by && (
           <>
@@ -49,7 +55,7 @@ export const BorderlandObjectiveDetails = ({
             </span>
             <span className="col-span-1">Claimed</span>
             <span className="col-span-1">
-              <TimerSince time={mapObjective.claimed_at} />
+              {showDetails && <TimerSince time={mapObjective.claimed_at} />}
             </span>
           </>
         )}
